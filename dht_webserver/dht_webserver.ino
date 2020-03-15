@@ -13,8 +13,8 @@
 #include <DHT.h>
 
 // Replace with your network credentials
-const char* ssid = "Santsa sgs8";
-const char* password = "";
+extern const char* ssid;
+extern const char* password;
 
 #define DHTPIN 5     // Digital pin connected to the DHT sensor
 
@@ -37,7 +37,7 @@ AsyncWebServer server(80);
 unsigned long previousMillis = 0;    // will store last time DHT was updated
 
 // Updates DHT readings every 2 seconds
-const long interval = 2000;  
+const long interval = 2000;
 
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML>
@@ -267,22 +267,22 @@ setInterval(function ( ) {
 </html>)rawliteral";
 
 // Replaces placeholder with DHT values
-String processor(const String& var){
+String processor(const String& var) {
   //Serial.println(var);
-  if(var == "TEMPERATURE"){
+  if (var == "TEMPERATURE") {
     return String(t);
   }
-  else if(var == "HUMIDITY"){
+  else if (var == "HUMIDITY") {
     return String(h);
   }
   return String();
 }
 
-void setup(){
+void setup() {
   // Serial port for debugging purposes
   Serial.begin(115200);
   dht.begin();
-  
+
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
   Serial.println("Connecting to WiFi");
@@ -295,21 +295,21 @@ void setup(){
   Serial.println(WiFi.localIP());
 
   // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send_P(200, "text/html", index_html, processor);
   });
-  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send_P(200, "text/plain", String(t).c_str());
   });
-  server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send_P(200, "text/plain", String(h).c_str());
   });
 
   // Start server
   server.begin();
 }
- 
-void loop(){  
+
+void loop() {
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     // save the last time you updated the DHT values
@@ -328,7 +328,7 @@ void loop(){
     }
     // Read Humidity
     float newH = dht.readHumidity();
-    // if humidity read failed, don't change h value 
+    // if humidity read failed, don't change h value
     if (isnan(newH)) {
       Serial.println("Failed to read from DHT sensor!");
     }
