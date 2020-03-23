@@ -36,8 +36,8 @@ AsyncWebServer server(80);
 // The value will quickly become too large for an int to store
 unsigned long previousMillis = 0;    // will store last time DHT was updated
 
-// Updates DHT readings every 2 seconds
-const long interval = 2000;
+// Updates DHT readings every 10 seconds
+const long interval = 10000;
 
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML>
@@ -208,7 +208,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   setInterval(function() {
     // Call a function repetatively with 5 Second interval
     getData();
-  }, 5000); //5000mSeconds update rate
+  }, 10000); //10000mSeconds update rate
    
   function getData() {
     var time = new Date().toLocaleTimeString();
@@ -251,7 +251,7 @@ setInterval(function ( ) {
   };
   xhttp.open("GET", "/temperature", true);
   xhttp.send();
-}, 5000) ;
+}, 10000) ;
 
 setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
@@ -262,7 +262,7 @@ setInterval(function ( ) {
   };
   xhttp.open("GET", "/humidity", true);
   xhttp.send();
-}, 5000 ) ;
+}, 10000 ) ;
 </script>
 </html>)rawliteral";
 
